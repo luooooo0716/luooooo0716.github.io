@@ -5,22 +5,72 @@
   <title>My Web Page</title>
 </head>
 <body>
-  <body style="background-color:lavender;">
-    <h1 style="background-color:lightskyblue;">My First Website</h1>
-   <h2>I hope you like it herehhh.</h2>
-    <h3>I hope you like it here.</h3>
-     <h4>I hope you like it here.</h4>
-      <h5>I hope you like it here.</h5>
-       <h6>I hope you like it here.</h6>
-        <p style="color:red;">This is my paragraph.</p><br>
-        <p>This is another paragraph.</p>
-        <b>Bold text</b>
-        <i>Italic text</i>
-        <em>Emphasized text</em>
-        <sub>Subscript text</sub>
-        <sup>Superscript text</sup>
-        <img src="http://www.cuc.edu.cn/_upload/site/00/05/5/logo.png">
-        <a href="http://www.cuc.edu.cn/"target="_blank">This is the link to CUC's wbesite</a>
-        <img src="mmexport1615429908362.jpg">
+  public class GuessGame {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		char[] chs = generator();
+		StringBuffer rand = new StringBuffer();
+		for(char ch:chs) {
+			rand.append(ch);
+		}
+		System.out.println("随机产生的字符为:"+rand.toString());//作弊，否则不好猜啊
+		int count = 0;
+		while(true) {
+			System.out.println("请输入五个字母:");
+			String str = scan.nextLine().toUpperCase();//获取输入的字符串，并将其转化为全大写
+			if(str.equals("EXIT")) {
+				System.out.println("欢迎下次再来！");
+				break;
+			}
+			char[] input = str.toCharArray();
+			int[] result = check(chs, input);
+			if(result[0]==input.length) {
+				int score = 100*input.length-10*count;
+				System.out.println("恭喜你，猜对了，得分为"+score);
+				break;
+			}else {
+				count++;
+				System.out.println("本次位置对的字母个数为："+result[0]+";字母正确的个数为："+result[1]);
+			}
+
+		}
+	}
+
+	//产生随机字符的方法
+	public static char[] generator() {
+		char[] chs = new char[5];
+		char[] letters = new char[]{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+		           				'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+		        				'W', 'X', 'Y', 'Z' };
+		boolean[] flags = new boolean[letters.length];
+		for(int i=0;i<chs.length;i++) {
+			int index;
+			do {
+				index = (int)(Math.random()*letters.length);
+			}while(flags[index]==true);
+			chs[i] = letters[index];
+			flags[index] = true;
+		}
+		return chs;
+	}
+
+	//随机字符和输入的字符对比的结果
+	public static int[] check(char[] chs,char[] input) {
+		int[] result = new int[2];//result[0]表示位置猜对了，result[1]表示字符猜对了
+		for(int i=0;i<chs.length;i++) {
+			for(int j=0;j<input.length;j++) {
+				if(chs[i]==input[j]) {
+					result[1]++;
+					if(i==j) {
+						result[0]++;
+					}
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
 </body>
 </html>
